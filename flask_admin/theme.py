@@ -31,3 +31,25 @@ class BootstrapTheme(Theme):
 
 
 Bootstrap4Theme = partial(BootstrapTheme, folder="bootstrap4")
+
+
+@dataclass
+class TablerTheme(Theme):
+    """
+    Tabler 1.4.0 theme for Flask-Admin.
+
+    Uses Tabler UI (https://tabler.io/) as the front end, loaded via CDN.
+
+    Usage::
+
+        t = TablerTheme()
+        admin = Admin(app, name='microblog', theme=t)
+
+    Or with a custom base template::
+
+        t = TablerTheme(base_template='my_base.html')
+        admin = Admin(app, name='microblog', theme=t)
+    """
+
+    folder: typing.Literal["tabler"] = "tabler"
+    base_template: str = "admin/base.html"
