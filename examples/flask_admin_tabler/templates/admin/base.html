@@ -26,71 +26,66 @@
     {% endblock %}
   </head>
   <body class="antialiased">
-    <div class="wrapper">
+    <div class="page">
       {% block page_body %}
-      <!-- Vertical sidebar -->
-      <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
-        <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu"
-                  aria-controls="sidebar-menu" aria-expanded="false" aria-label="Toggle navigation">
+      <!-- Sticky top navbar -->
+      <header class="navbar navbar-expand-md sticky-top d-print-none">
+        <div class="container-xl">
+          {% block brand %}
+          <a class="navbar-brand navbar-brand-autodark" href="{{ admin_view.admin.url }}">{{ admin_view.admin.name }}</a>
+          {% endblock %}
+          <!-- Toggle button for smaller screens -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
+                  aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          {% block brand %}
-          <h1 class="navbar-brand navbar-brand-autodark">
-            <a href="{{ admin_view.admin.url }}">{{ admin_view.admin.name }}</a>
-          </h1>
-          {% endblock %}
-          <div class="collapse navbar-collapse" id="sidebar-menu">
+          <!-- Collapsible menu -->
+          <div class="collapse navbar-collapse" id="navbar-menu">
             {% block main_menu %}
-            <ul class="navbar-nav pt-lg-3">
+            <ul class="navbar-nav me-auto">
               {{ layout.menu() }}
             </ul>
             {% endblock %}
             {% block menu_links %}
-            <div class="mt-auto">
-              <ul class="navbar-nav">
-                {{ layout.menu_links() }}
-              </ul>
-            </div>
+            <ul class="navbar-nav ms-auto">
+              {{ layout.menu_links() }}
+            </ul>
             {% endblock %}
             {% block access_control %}
             {% endblock %}
           </div>
         </div>
-      </aside>
+      </header>
 
-      <!-- Main content -->
-      <div class="navbar-expand-lg">
-        <!-- Page wrapper -->
-        <div class="page-wrapper">
-          <!-- Page header -->
-          <div class="page-header d-print-none">
-            <div class="container-fluid">
-              <div class="row g-2 align-items-center">
-                <div class="col">
-                  {% block page_title %}
-                  <h2 class="page-title">
-                    {{ layout.menu_icon(admin_view.menu) }}
-                    {{ admin_view.name }}
-                  </h2>
-                  {% endblock %}
-                </div>
+      <!-- Page wrapper -->
+      <div class="page-wrapper">
+        <!-- Page header -->
+        <div class="page-header d-print-none">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                {% block page_title %}
+                <h2 class="page-title">
+                  {{ layout.menu_icon(admin_view.menu) }}
+                  {{ admin_view.name }}
+                </h2>
+                {% endblock %}
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Page body -->
-          <div class="page-body">
-            <div class="container-fluid">
-              {% block messages %}
-                  {{ layout.messages() }}
-              {% endblock %}
+        <!-- Page body -->
+        <div class="page-body">
+          <div class="container-xl">
+            {% block messages %}
+                {{ layout.messages() }}
+            {% endblock %}
 
-              {# store the jinja2 context for form_rules rendering logic #}
-              {% set render_ctx = h.resolve_ctx() %}
+            {# store the jinja2 context for form_rules rendering logic #}
+            {% set render_ctx = h.resolve_ctx() %}
 
-              {% block body %}{% endblock %}
-            </div>
+            {% block body %}{% endblock %}
           </div>
         </div>
       </div>
