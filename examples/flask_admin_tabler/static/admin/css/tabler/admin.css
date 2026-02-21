@@ -72,8 +72,3 @@ table.filters {
 tr.hidden-by-filter {
     display: none;
 }
-
-/* Tabler navbar adjustments */
-.navbar {
-    background-color: var(--tblr-navbar-bg, #206bc4);
-}
