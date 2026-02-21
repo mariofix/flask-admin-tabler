@@ -1,0 +1,12 @@
+[project]
+name = "example-flask-admin-tabler"
+version = "0.1.0"
+description = "Flask-Admin Tabler Theme Example."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "flask-admin[sqlalchemy-with-utils,export]",
+]
+
+[tool.uv.sources]
+flask-admin = { path = "../../", editable = true }
