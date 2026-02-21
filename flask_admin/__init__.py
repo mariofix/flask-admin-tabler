@@ -8,4 +8,3 @@ from .base import AdminIndexView  # noqa: F401
 from .base import BaseView  # noqa: F401
 from .base import expose  # noqa: F401
 from .base import expose_plugview  # noqa: F401
-from .theme import TablerTheme  # noqa: F401
