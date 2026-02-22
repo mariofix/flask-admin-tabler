@@ -28,11 +28,8 @@ classifiers = [
 Source = "https://github.com/mariofix/flask-admin-tabler"
 
 [build-system]
-requires = ["flit_core<4"]
-build-backend = "flit_core.buildapi"
-
-[tool.flit.module]
-name = "flask_admin_tabler"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
