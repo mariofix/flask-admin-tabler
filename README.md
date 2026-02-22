@@ -31,6 +31,15 @@ admin = Admin(app, name="My App", theme=theme)
 That's it — navigating to `/admin/` will now render the Tabler UI instead of
 the default Bootswatch theme.
 
+A fully runnable example (including a SQLAlchemy model and sample data) is
+available in [`examples/quickstart.py`](examples/quickstart.py):
+
+```shell
+pip install flask-admin-tabler flask-sqlalchemy
+python examples/quickstart.py
+# open http://127.0.0.1:5000/admin/
+```
+
 ## How it works
 
 `TablerTheme.init_app(app)` registers a Flask blueprint named
