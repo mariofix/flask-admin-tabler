@@ -9,7 +9,7 @@ from flask_admin.theme import Theme
 @dataclass
 class TablerTheme(Theme):
     """
-    Tabler 1.4.0 theme for Flask-Admin.
+    Tabler theme for Flask-Admin.
 
     Uses Tabler UI (https://tabler.io/) as the front end, loaded via CDN.
 
@@ -26,16 +26,30 @@ class TablerTheme(Theme):
         theme.init_app(app)  # call before Admin(app, ...)
         admin = Admin(app, name="my app", theme=theme)
 
-    Or with a custom base template::
+    Or with a sidebar layout and dark color scheme::
 
-        theme = TablerTheme(base_template="my_base.html")
+        theme = TablerTheme(layout="vertical", color_scheme="dark")
         theme.init_app(app)
         admin = Admin(app, name="my app", theme=theme)
+
+    Parameters
+    ----------
+    layout:
+        ``"horizontal"`` (default) renders a top navigation bar.
+        ``"vertical"`` renders a sidebar navigation panel.
+    color_scheme:
+        ``"light"`` (default) uses the light Tabler theme.
+        ``"dark"`` applies ``data-bs-theme="dark"`` to the ``<html>`` element.
+    tabler_icons:
+        When ``True`` (default) the Tabler Icons web-font CSS is loaded from
+        CDN.  Set to ``False`` to skip loading it.
     """
 
     folder: typing.Literal["tabler"] = "tabler"
     base_template: str = "admin/base.html"
     tabler_icons: bool = True
+    layout: typing.Literal["horizontal", "vertical"] = "horizontal"
+    color_scheme: typing.Literal["light", "dark"] = "light"
 
     def init_app(self, app: Flask) -> None:
         """Register Tabler theme templates and static files with the Flask app.

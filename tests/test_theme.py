@@ -17,6 +17,8 @@ def test_theme_defaults():
     assert theme.folder == "tabler"
     assert theme.base_template == "admin/base.html"
     assert theme.tabler_icons is True
+    assert theme.layout == "horizontal"
+    assert theme.color_scheme == "light"
 
 
 def test_theme_custom_base_template():
@@ -27,6 +29,16 @@ def test_theme_custom_base_template():
 def test_theme_tabler_icons_disabled():
     theme = TablerTheme(tabler_icons=False)
     assert theme.tabler_icons is False
+
+
+def test_theme_layout_vertical():
+    theme = TablerTheme(layout="vertical")
+    assert theme.layout == "vertical"
+
+
+def test_theme_color_scheme_dark():
+    theme = TablerTheme(color_scheme="dark")
+    assert theme.color_scheme == "dark"
 
 
 def test_init_app_registers_blueprint(app):
@@ -94,3 +106,55 @@ def test_admin_tabler_icons_css_not_loaded_when_disabled(app):
     response = client.get("/admin/")
     assert response.status_code == 200
     assert b"tabler-icons.min.css" not in response.data
+
+
+def test_admin_horizontal_layout_renders_navbar(app):
+    theme = TablerTheme(layout="horizontal")
+    theme.init_app(app)
+    Admin(app, name="Test Admin", theme=theme)
+
+    client = app.test_client()
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    # Horizontal layout uses a top navbar header
+    assert b"navbar-expand-md" in response.data
+    # Sidebar element should NOT be present
+    assert b"navbar-vertical" not in response.data
+
+
+def test_admin_vertical_layout_renders_sidebar(app):
+    theme = TablerTheme(layout="vertical")
+    theme.init_app(app)
+    Admin(app, name="Test Admin", theme=theme)
+
+    client = app.test_client()
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    # Vertical layout uses a sidebar aside element
+    assert b"navbar-vertical" in response.data
+    # sidebar-menu collapse target should be present
+    assert b"sidebar-menu" in response.data
+
+
+def test_admin_dark_color_scheme_sets_data_attribute(app):
+    theme = TablerTheme(color_scheme="dark")
+    theme.init_app(app)
+    Admin(app, name="Test Admin", theme=theme)
+
+    client = app.test_client()
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    assert b'data-bs-theme="dark"' in response.data
+
+
+def test_admin_light_color_scheme_no_dark_attribute(app):
+    theme = TablerTheme(color_scheme="light")
+    theme.init_app(app)
+    Admin(app, name="Test Admin", theme=theme)
+
+    client = app.test_client()
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    # The html element should not have data-bs-theme="dark"
+    # (sidebar always has data-bs-theme="dark", so check html tag specifically)
+    assert b'<html lang="en">' in response.data
