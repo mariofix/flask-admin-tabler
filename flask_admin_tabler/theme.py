@@ -74,7 +74,9 @@ class TablerTheme(Theme):
         ``"1.5"``, ``"2"``.  ``None`` leaves the attribute unset.
     tabler_icons:
         When ``True`` (default) the Tabler Icons web-font CSS is loaded from
-        CDN.  Set to ``False`` to skip loading it.
+        CDN and row-action icons use Tabler icon classes (``ti ti-*``).
+        When ``False``, Font Awesome 4 CSS is loaded from CDN instead and
+        row-action icons use Font Awesome classes (``fa fa-*``).
     """
 
     folder: typing.Literal["tabler"] = "tabler"

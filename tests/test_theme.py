@@ -112,6 +112,28 @@ def test_admin_tabler_icons_css_not_loaded_when_disabled(app):
     assert b"tabler-icons.min.css" not in response.data
 
 
+def test_admin_font_awesome_css_loaded_when_tabler_icons_disabled(app):
+    theme = TablerTheme(tabler_icons=False)
+    theme.init_app(app)
+    Admin(app, name="Test Admin", theme=theme)
+
+    client = app.test_client()
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    assert b"font-awesome" in response.data
+
+
+def test_admin_font_awesome_css_not_loaded_when_tabler_icons_enabled(app):
+    theme = TablerTheme(tabler_icons=True)
+    theme.init_app(app)
+    Admin(app, name="Test Admin", theme=theme)
+
+    client = app.test_client()
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    assert b"font-awesome" not in response.data
+
+
 def test_admin_horizontal_layout_renders_navbar(app):
     theme = TablerTheme(layout="horizontal")
     theme.init_app(app)
