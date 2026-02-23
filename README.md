@@ -31,6 +31,28 @@ admin = Admin(app, name="My App", theme=theme)
 That's it — navigating to `/admin/` will now render the Tabler UI instead of
 the default Bootswatch theme.
 
+### Tabler Icons
+
+[Tabler Icons](https://tabler.io/icons) are loaded from CDN by default.  To use
+them, set `icon_type="tabler"` and `icon_value` to the icon name (without the
+`ti-` prefix) when building your menu:
+
+```python
+from flask_admin import Admin
+from flask_admin.menu import MenuView
+
+admin = Admin(app, name="My App", theme=theme)
+admin.add_view(MenuView("Dashboard", "/admin/", icon_type="tabler", icon_value="home"))
+```
+
+This renders `<i class="ti ti-home"></i>` in the navigation bar.
+
+To opt out of loading the Tabler Icons webfont, pass `tabler_icons=False`:
+
+```python
+theme = TablerTheme(tabler_icons=False)
+```
+
 A fully runnable example (including a SQLAlchemy model and sample data) is
 available in [`examples/quickstart.py`](examples/quickstart.py):
 
