@@ -188,8 +188,8 @@
       <div id="active-filters-data" class="d-none">{{ active_filters|tojson|safe }}</div>
     {% endif %}
     {{ lib.form_js() }}
-    <script {{ admin_csp_nonce_attribute }} src="{{ admin_static.url(filename='admin/js/bs4_modal.js', v='1.0.0') }}"></script>
-    <script {{ admin_csp_nonce_attribute }} src="{{ admin_static.url(filename='admin/js/bs4_filters.js', v='1.0.0') }}"></script>
+    <script {{ admin_csp_nonce_attribute }} src="{{ url_for('flask_admin_tabler.static', filename='admin/js/tabler_modal.js') }}" type="text/javascript"></script>
+    <script {{ admin_csp_nonce_attribute }} src="{{ url_for('flask_admin_tabler.static', filename='admin/js/bs4_filters.js') }}" type="text/javascript"></script>
 
 
     {{ actionlib.script(_gettext('Please select at least one record.'),
