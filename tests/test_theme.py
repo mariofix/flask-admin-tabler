@@ -19,6 +19,10 @@ def test_theme_defaults():
     assert theme.tabler_icons is True
     assert theme.layout == "horizontal"
     assert theme.color_scheme == "light"
+    assert theme.primary_color is None
+    assert theme.font is None
+    assert theme.base_color is None
+    assert theme.corner_radius is None
 
 
 def test_theme_custom_base_template():
@@ -155,6 +159,107 @@ def test_admin_light_color_scheme_no_dark_attribute(app):
     client = app.test_client()
     response = client.get("/admin/")
     assert response.status_code == 200
-    # The html element should not have data-bs-theme="dark"
-    # (sidebar always has data-bs-theme="dark", so check html tag specifically)
-    assert b'<html lang="en">' in response.data
+    # Light mode sets data-bs-theme="light", never "dark"
+    assert b'data-bs-theme="light"' in response.data
+    assert b'data-bs-theme="dark"' not in response.data
+
+
+def test_theme_primary_color_sets_attribute(app):
+    theme = TablerTheme(primary_color="indigo")
+    theme.init_app(app)
+    Admin(app, name="Test Admin", theme=theme)
+
+    client = app.test_client()
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    assert b'data-bs-theme-primary="indigo"' in response.data
+
+
+def test_theme_primary_color_none_omits_attribute(app):
+    theme = TablerTheme()
+    theme.init_app(app)
+    Admin(app, name="Test Admin", theme=theme)
+
+    client = app.test_client()
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    assert b"data-bs-theme-primary" not in response.data
+
+
+def test_theme_font_sets_attribute(app):
+    theme = TablerTheme(font="serif")
+    theme.init_app(app)
+    Admin(app, name="Test Admin", theme=theme)
+
+    client = app.test_client()
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    assert b'data-bs-theme-font="serif"' in response.data
+
+
+def test_theme_base_color_sets_attribute(app):
+    theme = TablerTheme(base_color="slate")
+    theme.init_app(app)
+    Admin(app, name="Test Admin", theme=theme)
+
+    client = app.test_client()
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    assert b'data-bs-theme-base="slate"' in response.data
+
+
+def test_theme_corner_radius_sets_attribute(app):
+    theme = TablerTheme(corner_radius="1.5")
+    theme.init_app(app)
+    Admin(app, name="Test Admin", theme=theme)
+
+    client = app.test_client()
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    assert b'data-bs-theme-radius="1.5"' in response.data
+
+
+def test_theme_corner_radius_none_omits_attribute(app):
+    theme = TablerTheme()
+    theme.init_app(app)
+    Admin(app, name="Test Admin", theme=theme)
+
+    client = app.test_client()
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    assert b"data-bs-theme-radius" not in response.data
+
+
+def test_theme_all_settings_rendered(app):
+    theme = TablerTheme(
+        color_scheme="dark",
+        primary_color="teal",
+        font="monospace",
+        base_color="zinc",
+        corner_radius="2",
+    )
+    theme.init_app(app)
+    Admin(app, name="Test Admin", theme=theme)
+
+    client = app.test_client()
+    response = client.get("/admin/")
+    assert response.status_code == 200
+    assert b'data-bs-theme="dark"' in response.data
+    assert b'data-bs-theme-primary="teal"' in response.data
+    assert b'data-bs-theme-font="monospace"' in response.data
+    assert b'data-bs-theme-base="zinc"' in response.data
+    assert b'data-bs-theme-radius="2"' in response.data
+
+
+def test_theme_invalid_primary_color_raises():
+    import pytest
+
+    with pytest.raises(ValueError, match="primary_color"):
+        TablerTheme(primary_color="invalid-color")
+
+
+def test_theme_invalid_corner_radius_raises():
+    import pytest
+
+    with pytest.raises(ValueError, match="corner_radius"):
+        TablerTheme(corner_radius="3")

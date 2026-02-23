@@ -4,7 +4,13 @@
 {%- set _is_vertical = _theme.layout == 'vertical' -%}
 {%- set _color_scheme = _theme.color_scheme if _theme.color_scheme in ('light', 'dark') else 'light' -%}
 <!DOCTYPE html>
-<html lang="en"{% if _color_scheme == 'dark' %} data-bs-theme="dark"{% endif %}>
+<html lang="en"
+  data-bs-theme="{{ _color_scheme }}"
+  {%- if _theme.primary_color %} data-bs-theme-primary="{{ _theme.primary_color }}"{% endif %}
+  {%- if _theme.font %} data-bs-theme-font="{{ _theme.font }}"{% endif %}
+  {%- if _theme.base_color %} data-bs-theme-base="{{ _theme.base_color }}"{% endif %}
+  {%- if _theme.corner_radius %} data-bs-theme-radius="{{ _theme.corner_radius }}"{% endif %}
+>
   <head>
     <title>{% block title %}{% if admin_view.category %}{{ admin_view.category }} - {% endif %}{{ admin_view.name }} - {{ admin_view.admin.name }}{% endblock %}</title>
     {% block head_meta %}
